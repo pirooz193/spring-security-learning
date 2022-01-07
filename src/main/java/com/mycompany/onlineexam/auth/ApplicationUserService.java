@@ -1,34 +1,26 @@
 package com.mycompany.onlineexam.auth;
 
-import com.mycompany.onlineexam.domain.Admin;
-import com.mycompany.onlineexam.domain.Master;
-import com.mycompany.onlineexam.domain.Student;
-import com.mycompany.onlineexam.service.AdminService;
-import com.mycompany.onlineexam.service.MasterService;
-import com.mycompany.onlineexam.service.StudentService;
+import com.mycompany.onlineexam.domain.User;
+import com.mycompany.onlineexam.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ApplicationUserService  implements UserDetailsService {
 
-    private final AdminService adminService;
-    private final StudentService studentService;
-    private final MasterService masterService;
+    private final UserRepository userRepository;
 
-    public ApplicationUserService(AdminService adminService, StudentService studentService, MasterService masterService) {
-        this.adminService = adminService;
-        this.studentService = studentService;
-        this.masterService = masterService;
+    public ApplicationUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Admin admin = adminService.getAdminByUsername(username);
-        Student student = studentService.getStudentByUsername(username);
-        Master master = masterService.getMasterByUsername(username);
+        Optional<User> user = userRepository.findUserByUsername(username);
         return null;
     }
 }
