@@ -2,6 +2,7 @@ package com.mycompany.onlineexam.web.errors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +23,12 @@ public class ApplicationExceptionHandler implements ProblemHandling {
         if (e instanceof HttpClientErrorException) {
             response.setStatusCode(((HttpClientErrorException) e).getStatusCode().value());
             response.setDetail(((HttpClientErrorException) e).getStatusText());
-        } else response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        } else if (e instanceof DataIntegrityViolationException) {
+            response.setDetail(e.getMessage());
+            response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        } else {
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
         logger.error(response);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }

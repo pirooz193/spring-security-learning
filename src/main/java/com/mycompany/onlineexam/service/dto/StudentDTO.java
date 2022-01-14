@@ -40,6 +40,9 @@ public class StudentDTO {
         this.phoneNumber = phoneNumber;
     }
 
+    public StudentDTO() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
