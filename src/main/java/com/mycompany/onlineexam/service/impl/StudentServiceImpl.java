@@ -7,6 +7,7 @@ import com.mycompany.onlineexam.domain.constants.Constants;
 import com.mycompany.onlineexam.repository.StudentRepository;
 import com.mycompany.onlineexam.service.ExamService;
 import com.mycompany.onlineexam.service.StudentService;
+import com.mycompany.onlineexam.service.UserService;
 import com.mycompany.onlineexam.service.dto.AnswerDTO;
 import com.mycompany.onlineexam.service.dto.StudentDTO;
 import com.mycompany.onlineexam.service.mapper.AnswerMapper;
@@ -15,14 +16,19 @@ import com.mycompany.onlineexam.web.mdel.ApiUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.mycompany.onlineexam.config.enumuration.ApplicationUserRoles.ROLE_STUDENT;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
     private final Logger logger = LogManager.getLogger(StudentServiceImpl.class);
+    private final UserService userService ;
+    private final PasswordEncoder passwordEncoder;
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final ExamService examService;
@@ -31,7 +37,9 @@ public class StudentServiceImpl implements StudentService {
     @Value(value = "${application.constants.student-code-number}")
     private Integer NUMBER_OF_STUDENT_CODE;
 
-    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper, ExamService examService, AnswerMapper answerMapper) {
+    public StudentServiceImpl(UserService userService, PasswordEncoder passwordEncoder, StudentRepository studentRepository, StudentMapper studentMapper, ExamService examService, AnswerMapper answerMapper) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
         this.examService = examService;
@@ -49,8 +57,10 @@ public class StudentServiceImpl implements StudentService {
         logger.debug("Request to create an student :{}", studentDTO);
         Student student = studentMapper.toEntity(studentDTO);
         student.setStudentCode(ApiUtil.generateRandomCode(Constants.STUDENT, NUMBER_OF_STUDENT_CODE));
-        student.setPassword(studentDTO.getPhoneNumber());
-        return studentRepository.save(student);
+        student.setPassword(passwordEncoder.encode(studentDTO.getPhoneNumber()));
+        Student savedStudent = studentRepository.save(student);
+        userService.addRoleToUser(savedStudent.getUsername(), ROLE_STUDENT.name());
+        return savedStudent;
     }
 
     @Override

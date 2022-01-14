@@ -8,6 +8,7 @@ import com.mycompany.onlineexam.service.ExamService;
 import com.mycompany.onlineexam.service.QuestionService;
 import com.mycompany.onlineexam.service.dto.ExamDTO;
 import com.mycompany.onlineexam.service.mapper.ExamMapper;
+import com.mycompany.onlineexam.web.errors.ExamNotFoundException;
 import com.mycompany.onlineexam.web.errors.IsNotStartTimeException;
 import com.mycompany.onlineexam.web.errors.TimeIsUpException;
 import com.mycompany.onlineexam.web.mdel.ApiUtil;
@@ -51,6 +52,8 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public void deleteExamByExamCode(String examCode) {
         logger.info("Request to delete an Exam with exam-code :{}", examCode);
+        Exam exam = getExamByExamCode(examCode);
+        if (exam == null) throw new ExamNotFoundException(examCode);
         examRepository.deleteExamByExamCode(examCode);
     }
 
@@ -96,6 +99,7 @@ public class ExamServiceImpl implements ExamService {
     public Long checkExamRemainingTime(String examCode) throws TimeIsUpException {
         logger.debug("Request to get Exam remaining time with exam-code:{} in service layer", examCode);
         Exam exam = getExamByExamCode(examCode);
+        if (exam == null) throw new ExamNotFoundException(examCode);
         checkExamTime(exam);
         Long remainingTime = ChronoUnit.MINUTES.between(LocalDateTime.now(), exam.getEndDateTime());
         if (remainingTime <= 0) throw new TimeIsUpException();

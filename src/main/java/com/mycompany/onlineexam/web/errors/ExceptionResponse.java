@@ -2,22 +2,23 @@ package com.mycompany.onlineexam.web.errors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.http.HttpStatus;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExceptionResponse {
-
     @JsonProperty("title")
     private String title;
     @JsonProperty("detail")
     private String detail;
-    @JsonProperty("status")
-    private Integer status;
+    @JsonProperty("statusCode")
+    private Integer statusCode;
 
-    public ExceptionResponse(String title, String detail, Integer status) {
-        this.title = title;
-        this.detail = detail;
-        this.status = status;
+    @Override
+    public String toString() {
+        return "ExceptionResponse{" +
+                "title='" + title + '\'' +
+                ", detail='" + detail + '\'' +
+                ", statusCode=" + statusCode +
+                '}';
     }
 
     public String getTitle() {
@@ -36,11 +37,11 @@ public class ExceptionResponse {
         this.detail = detail;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Integer getStatusCode() {
+        return statusCode;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setStatusCode(Integer statusCode) {
+        this.statusCode = statusCode;
     }
 }

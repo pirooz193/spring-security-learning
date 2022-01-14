@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/exam")
+@RequestMapping("/api")
 public class ExamResource {
 
     private Logger logger = LogManager.getLogger(ExamResource.class);
@@ -24,35 +24,35 @@ public class ExamResource {
         this.examService = examService;
     }
 
-    @PostMapping("/create-exam")
+    @PostMapping("/master/create-exam")
     public ResponseEntity<Exam> createExam(@RequestBody ExamDTO examDTO) {
         logger.info("Request to create an Exam :{}", examDTO);
         Exam exam = examService.save(examDTO);
         return ResponseEntity.created(URI.create("/create")).body(exam);
     }
 
-    @GetMapping("/get-all")
+    @GetMapping("/admin/get-all-exams")
     public ResponseEntity<List<Exam>> getAllExams() {
         logger.info("Request to get all Exams");
         List<Exam> exams = examService.getAllExams();
         return ResponseEntity.ok(exams);
     }
 
-    @DeleteMapping("/delete-exam")
-    public ResponseEntity<Void> deleteExam(@RequestParam String examCode) {
+    @DeleteMapping("/master/delete-exam")
+    public ResponseEntity<?> deleteExam(@RequestParam String examCode) {
         logger.info("Request to delete an Exam with exam-code :{}", examCode);
         examService.deleteExamByExamCode(examCode);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete-question")
+    @DeleteMapping("/master/delete-question")
     public ResponseEntity<Void> deleteQuestion(@RequestParam String questionCode, @RequestParam String examCode) {
         logger.info("Request to delete Exam's question with question-code :{}", questionCode);
         examService.deleteQuestion(questionCode, examCode);
         return (ResponseEntity<Void>) ResponseEntity.ok();
     }
 
-    @GetMapping("/exam-info")
+    @GetMapping("/master/exam-info")
     public ResponseEntity<Exam> takeTest(@RequestParam String examCode) {
         logger.info("Request to check exam with exam-code :{}", examCode);
         Exam exam = examService.getExamByExamCode(examCode);
@@ -60,14 +60,14 @@ public class ExamResource {
         return ResponseEntity.ok(exam);
     }
 
-    @GetMapping("/remaining-time")
+    @GetMapping("/exam/remaining-time")
     public ResponseEntity<Long> getExamRemainingTime(@RequestParam String examCode) {
         logger.info("Request to get Exam remaining time with exam-code:{}", examCode);
         Long remainingTime = examService.checkExamRemainingTime(examCode);
         return ResponseEntity.ok(remainingTime);
     }
 
-    @GetMapping("/get-exam-by-student")
+    @GetMapping("/student/get-exam-by-student")
     public ResponseEntity<Exam> getExamQuestions(@RequestParam String examCode) {
         logger.info("Request to show exam questions by  exam-code :{}", examCode);
         Exam exam = examService.getExamByExamCode(examCode);
@@ -75,7 +75,7 @@ public class ExamResource {
         return ResponseEntity.ok(exam);
     }
 
-    @PutMapping("/update-time")
+    @PutMapping("/master/update-time")
     public ResponseEntity<ExamDTO> updateExamTime(@RequestParam String examCode,
                                                   @RequestParam String startTime,
                                                   @RequestParam String endTime) {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/master")
+@RequestMapping("/api")
 public class MasterResource {
 
     private final Logger logger = LogManager.getLogger(MasterResource.class);
@@ -31,7 +31,7 @@ public class MasterResource {
      * @param password
      * @return
      */
-    @GetMapping("/login")
+    @GetMapping("/master/login")
     public ResponseEntity<Master> loginMaster(@RequestParam String username, @RequestParam String password) {
         logger.info("Request to login Master with username:{} , and password :{}", username, password);
         Master master = masterService.checkMasterLogin(username, password);
@@ -45,7 +45,7 @@ public class MasterResource {
      * @param masterDto
      * @return
      */
-    @PostMapping("/create")
+    @PostMapping("/admin/create-master")
     public ResponseEntity<Master> createMaster(@RequestBody MasterDTO masterDto) {
         logger.info("Request to create a new Master :{}", masterDto);
         Master master = masterService.createMaster(masterDto);
@@ -59,13 +59,13 @@ public class MasterResource {
      * @param masterCode
      * @return
      */
-    @DeleteMapping("/delete-master/{masterCode}}")
+    @DeleteMapping("/admin/delete-master/{masterCode}}")
     public void deleteMaster(@PathVariable String masterCode) {
         logger.info("Request to delete Master with master code : {}", masterCode);
         masterService.deleteMaster(masterCode);
     }
 
-    @PutMapping("/update-info")
+    @PutMapping("/master/update-info")
     public ResponseEntity<Master> updateMasterInfo(@RequestBody MasterDTO masterDto) {
         logger.info("Request to update a master:{}", masterDto);
         Master master = masterService.updateMasterInfo(masterDto);

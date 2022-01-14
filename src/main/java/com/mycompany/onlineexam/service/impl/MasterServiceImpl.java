@@ -1,17 +1,20 @@
 package com.mycompany.onlineexam.service.impl;
 
-import com.mycompany.onlineexam.domain.Course;
 import com.mycompany.onlineexam.domain.Master;
 import com.mycompany.onlineexam.domain.constants.Constants;
 import com.mycompany.onlineexam.repository.MasterRepository;
 import com.mycompany.onlineexam.service.MasterService;
+import com.mycompany.onlineexam.service.UserService;
 import com.mycompany.onlineexam.service.dto.MasterDTO;
 import com.mycompany.onlineexam.service.mapper.MasterMapper;
 import com.mycompany.onlineexam.web.mdel.ApiUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.mycompany.onlineexam.config.enumuration.ApplicationUserRoles.ROLE_MASTER;
 
 @Service
 public class MasterServiceImpl implements MasterService {
@@ -21,10 +24,14 @@ public class MasterServiceImpl implements MasterService {
     private final Logger logger = LogManager.getLogger(MasterServiceImpl.class);
 
     private final MasterRepository masterRepository;
+    private final UserService userService ;
+    private final PasswordEncoder passwordEncoder;
     private final MasterMapper masterMapper;
 
-    public MasterServiceImpl(MasterRepository masterRepository, MasterMapper masterMapper) {
+    public MasterServiceImpl(MasterRepository masterRepository, UserService userService, PasswordEncoder passwordEncoder, MasterMapper masterMapper) {
         this.masterRepository = masterRepository;
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
         this.masterMapper = masterMapper;
     }
 
@@ -37,10 +44,11 @@ public class MasterServiceImpl implements MasterService {
     @Override
     public Master createMaster(MasterDTO masterDto) {
         Master master = masterMapper.toEntity(masterDto);
-        master.setPassword(master.getPhoneNumber());
+        master.setPassword(passwordEncoder.encode(master.getPhoneNumber()));
         master.setMasterCode(ApiUtil.generateRandomCode(Constants.MASTER_CODE, NUMBER_OF_MASTER_CODE));
-        masterRepository.save(master);
-        return master;
+        Master savedMaster = masterRepository.save(master);
+        userService.addRoleToUser(savedMaster.getUsername(), ROLE_MASTER.name());
+        return savedMaster;
     }
 
     @Override
@@ -54,7 +62,7 @@ public class MasterServiceImpl implements MasterService {
         logger.debug("Request to update master info :{}", masterDto);
         Master master = masterRepository.findById(masterDto.getId()).get();
         if (masterDto.getUsername() != null) master.setUsername(masterDto.getUsername());
-        if (masterDto.getPassword() != null) master.setPassword(masterDto.getPassword());
+        if (masterDto.getPassword() != null) master.setPassword(passwordEncoder.encode(masterDto.getPassword()));
         if (masterDto.getPhoneNumber() != null) master.setPhoneNumber(masterDto.getPhoneNumber());
         return masterRepository.save(master);
     }

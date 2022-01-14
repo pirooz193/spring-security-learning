@@ -1,80 +1,58 @@
 package com.mycompany.onlineexam.domain;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "admin")
-public class Admin {
+public class Admin extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
-    @Column(name = "password", nullable = false)
-    private String password;
+    private long id;
     @Column(name = "admin_code", nullable = false, unique = true)
     private String adminCode;
 
-    public Admin() {
+    public Admin(String username, String password, List<Role> roles, String adminCode) {
+        super(username, password, roles);
+        this.adminCode = adminCode;
     }
 
-    public Admin(Long id, String username, String password, String adminCode) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.adminCode = adminCode;
+    public Admin() {
+
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Admin admin = (Admin) o;
-        return id.equals(admin.id) &&
-                username.equals(admin.username) &&
-                password.equals(admin.password) &&
-                adminCode.equals(admin.adminCode);
+        return id == admin.id && adminCode.equals(admin.adminCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, adminCode);
+        return Objects.hash(super.hashCode(), id, adminCode);
     }
 
     @Override
     public String toString() {
         return "Admin{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", adminCode='" + adminCode + '\'' +
                 '}';
     }
 
-    public Long getId() {
+    @Override
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    @Override
+    public void setId(long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getAdminCode() {

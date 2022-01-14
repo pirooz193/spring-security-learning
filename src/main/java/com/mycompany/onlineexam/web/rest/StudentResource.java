@@ -23,7 +23,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/student")
+@RequestMapping("/api")
 public class StudentResource {
 
     private final Logger logger = LogManager.getLogger(StudentResource.class);
@@ -36,7 +36,7 @@ public class StudentResource {
         this.examService = examService;
     }
 
-    @GetMapping("/login")
+    @GetMapping("/student/login")
     public ResponseEntity<Student> loginStudent(@RequestParam String username, @RequestParam String password) {
         logger.info("Request to check student login with username:{} and password :{}", username, password);
         Student student = studentService.getStudentByUsernameAndPassword(username, password);
@@ -44,14 +44,14 @@ public class StudentResource {
         return ResponseEntity.ok(student);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/admin/create-student")
     public ResponseEntity<Student> createStudent(@RequestBody StudentDTO studentDTO) {
         logger.info("Request to create an student :{}", studentDTO);
         Student student = studentService.createStudent(studentDTO);
-        return ResponseEntity.created(URI.create("/create")).body(student);
+        return ResponseEntity.created(URI.create("/admin/create-student")).body(student);
     }
 
-    @GetMapping("/{studentCode}")
+    @GetMapping("/admin/get-student/{studentCode}")
     public ResponseEntity<Student> getStudentByStudentCode(@PathVariable String studentCode) {
         logger.info("Request to get sn Student by  student-code :{}", studentCode);
         Student student = studentService.getStudentByStudentCode(studentCode);
@@ -59,7 +59,7 @@ public class StudentResource {
         return ResponseEntity.ok().body(student);
     }
 
-    @GetMapping("/get-all")
+    @GetMapping("/admin/get-all-students")
     public ResponseEntity<List<Student>> getAllStudents() {
         logger.info("Request to get all students");
         List<Student> students = studentService.getAllStudents();
@@ -67,13 +67,13 @@ public class StudentResource {
         return ResponseEntity.ok(students);
     }
 
-    @DeleteMapping("/delete-student/{studentCode}")
+    @DeleteMapping("/admin/delete-student/{studentCode}")
     public void deleteStudent(@PathVariable String studentCode) {
         logger.info("Request to delete student with id :{}", studentCode);
         studentService.deleteStudentByStudentCode(studentCode);
     }
 
-    @PostMapping("/answer-questions")
+    @PostMapping("/student/answer-questions")
     public ResponseEntity<Float> answerQuestions(@RequestBody List<AnswerDTO> answerDTOS,
                                                  @RequestParam String examCode,
                                                  @RequestParam String studentCode) {
@@ -85,7 +85,7 @@ public class StudentResource {
         return ResponseEntity.ok(studentScore);
     }
 
-    @GetMapping("/take-exam")
+    @GetMapping("/student/take-exam")
     public ResponseEntity<ServiceResult> takeTest(@RequestParam String examCode, @RequestParam String studentCode) {
         logger.info("Request to take exam for exam with exam-code :{} and student-code :{}", examCode, studentCode);
         ServiceResult serviceResult;

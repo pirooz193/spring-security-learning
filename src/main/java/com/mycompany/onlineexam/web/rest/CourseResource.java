@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/course")
+@RequestMapping("/api")
 public class CourseResource {
 
     private final Logger logger = LogManager.getLogger(CourseResource.class);
@@ -33,35 +33,35 @@ public class CourseResource {
         this.courseService = courseService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/master/create-course")
     public ResponseEntity<Course> createCourse(@RequestBody CourseDTO courseDTO) {
         logger.info("Request to create a new Course:{} ", courseDTO);
         Course course = courseService.createCourse(courseDTO);
         return ResponseEntity.created(URI.create("/created")).body(course);
     }
 
-    @GetMapping("/get-all")
+    @GetMapping("/admin/get-all-courses")
     public ResponseEntity<List<Course>> getAllCourses() {
         logger.info("Request to get all courses");
             List<Course> courses = courseService.getAllCourses();
         return ResponseEntity.ok(courses);
     }
 
-    @GetMapping("/get-course")
+    @GetMapping("/master/get-course")
     public ResponseEntity<Course> getCourse(@RequestParam String courseCode) {
         logger.info("Request to get Course vy course-code :{}", courseCode);
             Course course = courseService.getCourseByCourseCode(courseCode);
         return ResponseEntity.ok(course);
     }
 
-    @PutMapping("/add-student")
+    @PutMapping("/master/add-student")
     public ResponseEntity<Integer> addStudentToCourse(@RequestParam String courseCode, @RequestParam String studentCode) throws FullCapacityException, StudentExistenceException {
         logger.info("Request to add ann student with studentCode:{} to  course with courseCode:{}", studentCode, courseCode);
             Integer courseCapacity = courseService.addStudentToCourse(studentCode, courseCode);
         return ResponseEntity.ok(courseCapacity);
     }
 
-    @PutMapping("/add-master")
+    @PutMapping("/admin/add-master")
     public ResponseEntity<Course> addMasterToCourse(@RequestParam String masterCode, @RequestParam String courseCode) {
         logger.info("Request to add ann master with masterCode:{} to  course with courseCode:{}", masterCode, courseCode);
             Course course = courseService.addMasterToCourse(masterCode, courseCode);

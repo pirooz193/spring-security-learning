@@ -1,85 +1,60 @@
 package com.mycompany.onlineexam.domain;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "student_table")
-public class Student {
+public class Student extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
-    @Column(name = "password", nullable = false)
-    private String password;
+    private long id;
     @Column(name = "student_code", nullable = false, unique = true)
     private String studentCode;
-    @Column(name = "phone_number" , nullable = false , unique = true)
-    private String phoneNumber ;
+    @Column(name = "phone_number", nullable = false, unique = true)
+    private String phoneNumber;
 
-    public Student() {
+    public Student(String username, String password, List<Role> roles, String studentCode, String phoneNumber) {
+        super(username, password, roles);
+        this.studentCode = studentCode;
+        this.phoneNumber = phoneNumber;
     }
 
-    public Student(Long id, String username, String password, String studentCode, Set<Course> courses) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.studentCode = studentCode;
+    public Student() {
+
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Student student = (Student) o;
-        return id.equals(student.id) &&
-                username.equals(student.username) &&
-                password.equals(student.password) &&
-                studentCode.equals(student.studentCode) ;
+        return id == student.id && studentCode.equals(student.studentCode) && phoneNumber.equals(student.phoneNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, studentCode);
+        return Objects.hash(super.hashCode(), id, studentCode, phoneNumber);
     }
 
     @Override
     public String toString() {
         return "Student{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", studentCode='" + studentCode + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getStudentCode() {
