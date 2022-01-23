@@ -50,4 +50,11 @@ public class UserController {
         userService.addRoleToUser(form.getUsername(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/get-token")
+    public ResponseEntity<String> getToken(@RequestParam String username, @RequestParam String password) {
+        logger.info("Request to get token with username :{} , and password :{}", username, password);
+       String token =  userService.getToken(username, password);
+        return ResponseEntity.ok(token);
+    }
 }

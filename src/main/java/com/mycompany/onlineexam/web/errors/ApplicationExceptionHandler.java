@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
 @RestControllerAdvice
@@ -23,6 +24,9 @@ public class ApplicationExceptionHandler implements ProblemHandling {
         if (e instanceof HttpClientErrorException) {
             response.setStatusCode(((HttpClientErrorException) e).getStatusCode().value());
             response.setDetail(((HttpClientErrorException) e).getStatusText());
+        } else if (e instanceof WebClientResponseException) {
+            response.setStatusCode(((WebClientResponseException) e).getStatusCode().value());
+            response.setDetail(e.getMessage());
         } else if (e instanceof DataIntegrityViolationException) {
             response.setDetail(e.getMessage());
             response.setStatusCode(HttpStatus.BAD_REQUEST.value());

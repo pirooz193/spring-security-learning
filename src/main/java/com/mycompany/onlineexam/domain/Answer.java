@@ -10,10 +10,14 @@ public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "content", nullable = false, unique = true)
+    @Column(name = "content", nullable = false/*, unique = true*/)
     private String content;
 
     public Answer() {
+    }
+
+    public Answer(String content) {
+        this.content = content;
     }
 
     public Answer(Long id, String content) {

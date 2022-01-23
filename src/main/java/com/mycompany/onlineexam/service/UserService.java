@@ -17,4 +17,6 @@ public interface UserService {
     void addRoleToUser(String username, String roleName);
 
     List<User> getAllUsers();
+
+    String getToken(String username, String password);
 }

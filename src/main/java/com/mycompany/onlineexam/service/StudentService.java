@@ -4,6 +4,7 @@ import com.mycompany.onlineexam.domain.Exam;
 import com.mycompany.onlineexam.domain.Student;
 import com.mycompany.onlineexam.service.dto.AnswerDTO;
 import com.mycompany.onlineexam.service.dto.StudentDTO;
+import com.mycompany.onlineexam.web.mdel.QuestionAndAnswerForm;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface StudentService {
 
     Student updateStudent(Student student);
 
-    float checkQuestionAnswers(List<AnswerDTO> answerDTOS, Exam exam  , String studentCode);
+    float checkQuestionAnswers(List<QuestionAndAnswerForm> studentAnswers, Exam exam  , String studentCode);
 
     Student getStudentByUsername(String username);
 }

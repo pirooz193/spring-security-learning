@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "application.constants.student-code-number",
+      "type": "java.lang.Integer",
+      "description": "Description for application.constants.student-code-number."
+    },
+    {
+      "name": "application.constants.master-code-number",
+      "type": "java.lang.Integer",
+      "description": "Description for application.constants.master-code-number."
+    }
+  ] }

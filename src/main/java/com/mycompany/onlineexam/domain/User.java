@@ -15,7 +15,7 @@ public class User {
     private long id;
     @Column(name = "username", nullable = false, unique = true, length = 20)
     private String username;
-    @Column(name = "password", nullable = false, unique = true)
+    @Column(name = "password", nullable = false)
     private String password;
     @ManyToMany
     private List<Role> roles = new ArrayList<>();

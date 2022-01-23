@@ -21,7 +21,7 @@ public class Exam {
     private LocalDateTime startDateTime ;
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endDateTime ;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private Set<Question> questions = new HashSet<>();
 
     @ElementCollection

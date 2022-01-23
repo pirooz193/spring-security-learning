@@ -13,6 +13,7 @@ import com.mycompany.onlineexam.service.dto.StudentDTO;
 import com.mycompany.onlineexam.service.mapper.AnswerMapper;
 import com.mycompany.onlineexam.service.mapper.StudentMapper;
 import com.mycompany.onlineexam.web.mdel.ApiUtil;
+import com.mycompany.onlineexam.web.mdel.QuestionAndAnswerForm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,12 +89,15 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public float checkQuestionAnswers(List<AnswerDTO> answerDTOS, Exam exam, String studentCode) {
-        logger.debug("Request to answer questions for exam with exam-code:{} , answers :{} in service layer", exam.getExamCode(), answerDTOS);
+    public float checkQuestionAnswers(List<QuestionAndAnswerForm> studentAnswers, Exam exam, String studentCode) {
+        logger.debug("Request to answer questions for exam with exam-code:{} , answers :{} in service layer", exam.getExamCode(), studentAnswers);
         Float examScore = 0f;
         for (Question question : exam.getQuestions()) {
-            for (AnswerDTO answerDTO : answerDTOS) {
-                if (answerDTO.getContent().equals(question.getCorrectAnswer().getContent())) examScore += question.getScore();
+            for (QuestionAndAnswerForm answer : studentAnswers) {
+                if (question.getQuestionCode().equals(answer.getQuestionCode())
+                        && answer.getAnswer().equals(question.getCorrectAnswer().getContent())) {
+                    examScore += question.getScore();
+                }
             }
         }
         Student student = studentRepository.getStudentByStudentCode(studentCode);

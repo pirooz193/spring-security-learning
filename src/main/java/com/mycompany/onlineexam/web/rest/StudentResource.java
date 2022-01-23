@@ -11,6 +11,7 @@ import com.mycompany.onlineexam.web.errors.NotFoundErrorException;
 import com.mycompany.onlineexam.web.errors.StudentListEmptyException;
 import com.mycompany.onlineexam.web.errors.UserNotFountException;
 import com.mycompany.onlineexam.web.mdel.ApiUtil;
+import com.mycompany.onlineexam.web.mdel.QuestionAndAnswerForm;
 import com.mycompany.onlineexam.web.mdel.ServiceResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -74,14 +75,14 @@ public class StudentResource {
     }
 
     @PostMapping("/student/answer-questions")
-    public ResponseEntity<Float> answerQuestions(@RequestBody List<AnswerDTO> answerDTOS,
+    public ResponseEntity<Float> answerQuestions(@RequestBody List<QuestionAndAnswerForm> studentAnswers,
                                                  @RequestParam String examCode,
                                                  @RequestParam String studentCode) {
-        logger.info("Request to answer questions for exam with exam-code:{} , answers :{}", examCode, answerDTOS);
+        logger.info("Request to answer questions for exam with exam-code:{} , answers :{}", examCode, studentAnswers);
         examService.checkExamRemainingTime(examCode);
 //            examService.checkExamTime(exam);
         Exam exam = examService.getExamByExamCode(examCode);
-        float studentScore = studentService.checkQuestionAnswers(answerDTOS, exam, studentCode);
+        float studentScore = studentService.checkQuestionAnswers(studentAnswers, exam, studentCode);
         return ResponseEntity.ok(studentScore);
     }
 
