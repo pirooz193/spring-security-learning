@@ -1,4 +1,4 @@
-package com.mycompany.onlineexam.web.mdel;
+package com.mycompany.onlineexam.web.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

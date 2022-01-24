@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ExamService {
-    Exam save(ExamDTO examDTO);
+    Exam save(ExamDTO examDTO , String courseCode);
 
     List<Exam> getAllExams();
 

@@ -2,9 +2,8 @@ package com.mycompany.onlineexam.service;
 
 import com.mycompany.onlineexam.domain.Exam;
 import com.mycompany.onlineexam.domain.Student;
-import com.mycompany.onlineexam.service.dto.AnswerDTO;
 import com.mycompany.onlineexam.service.dto.StudentDTO;
-import com.mycompany.onlineexam.web.mdel.QuestionAndAnswerForm;
+import com.mycompany.onlineexam.web.model.QuestionAndAnswerForm;
 
 import java.util.List;
 

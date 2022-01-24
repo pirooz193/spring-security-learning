@@ -6,7 +6,7 @@ import com.mycompany.onlineexam.domain.Question;
 import com.mycompany.onlineexam.domain.Student;
 import com.mycompany.onlineexam.repository.ExamRepository;
 import com.mycompany.onlineexam.repository.StudentRepository;
-import com.mycompany.onlineexam.web.mdel.QuestionAndAnswerForm;
+import com.mycompany.onlineexam.web.model.QuestionAndAnswerForm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,7 +139,6 @@ class StudentServiceImplTest {
     private Question createQuestion(String title, float score) {
         Question question = new Question();
         question.setQuestionTitle(title);
-//        question.setQuestionCode("test-question-code" + new Random().nextInt(100));
         question.setScore(score);
         return question;
     }

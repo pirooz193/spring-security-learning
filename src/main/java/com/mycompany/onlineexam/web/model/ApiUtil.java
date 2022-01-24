@@ -1,4 +1,4 @@
-package com.mycompany.onlineexam.web.mdel;
+package com.mycompany.onlineexam.web.model;
 
 import com.mycompany.onlineexam.domain.constants.Constants;
 import org.springframework.util.StringUtils;

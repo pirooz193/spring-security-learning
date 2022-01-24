@@ -16,4 +16,6 @@ public class Constants {
     public static final String REMAINING_TIME = "remaining_time";
     public static final String STUDENT_SCORE_KEYWORD = "Student score is : ";
 
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
 }

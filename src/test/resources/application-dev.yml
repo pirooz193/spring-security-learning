@@ -11,6 +11,8 @@ spring:
 
     show-sql: true
 application :
+  security:
+    login-address: localhost:8080/api/login
   constants:
     master-code-number: 7
     student-code-number: 7

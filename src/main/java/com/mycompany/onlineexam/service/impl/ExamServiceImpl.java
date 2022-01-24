@@ -1,8 +1,10 @@
 package com.mycompany.onlineexam.service.impl;
 
+import com.mycompany.onlineexam.domain.Course;
 import com.mycompany.onlineexam.domain.Exam;
 import com.mycompany.onlineexam.domain.Question;
 import com.mycompany.onlineexam.domain.constants.Constants;
+import com.mycompany.onlineexam.repository.CourseRepository;
 import com.mycompany.onlineexam.repository.ExamRepository;
 import com.mycompany.onlineexam.service.ExamService;
 import com.mycompany.onlineexam.service.QuestionService;
@@ -11,7 +13,7 @@ import com.mycompany.onlineexam.service.mapper.ExamMapper;
 import com.mycompany.onlineexam.web.errors.ExamNotFoundException;
 import com.mycompany.onlineexam.web.errors.IsNotStartTimeException;
 import com.mycompany.onlineexam.web.errors.TimeIsUpException;
-import com.mycompany.onlineexam.web.mdel.ApiUtil;
+import com.mycompany.onlineexam.web.model.ApiUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -28,19 +30,24 @@ public class ExamServiceImpl implements ExamService {
     private final ExamRepository examRepository;
     private final ExamMapper examMapper;
     private final QuestionService questionService;
+    private final CourseRepository courseRepository;
 
-    public ExamServiceImpl(ExamRepository examRepository, ExamMapper examMapper, QuestionService questionService) {
+    public ExamServiceImpl(ExamRepository examRepository, ExamMapper examMapper, QuestionService questionService, CourseRepository courseRepository) {
         this.examRepository = examRepository;
         this.examMapper = examMapper;
         this.questionService = questionService;
+        this.courseRepository = courseRepository;
     }
 
     @Override
-    public Exam save(ExamDTO examDTO) {
+    public Exam save(ExamDTO examDTO, String courseCode) {
         logger.debug("Request to  create an Exam  in service layer :{}", examDTO);
         Exam exam = examMapper.toEntity(examDTO);
         exam.setExamCode(ApiUtil.generateRandomCode(Constants.EXAM_CODE, 7));
-        return examRepository.save(exam);
+        Course course = courseRepository.findCourseByCourseCode(courseCode);
+        course.getExamList().add(exam);
+        courseRepository.save(course);
+        return exam;
     }
 
     @Override

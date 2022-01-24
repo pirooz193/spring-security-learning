@@ -2,7 +2,7 @@ package com.mycompany.onlineexam.domain;
 
 
 import com.mycompany.onlineexam.domain.constants.Constants;
-import com.mycompany.onlineexam.web.mdel.ApiUtil;
+import com.mycompany.onlineexam.web.model.ApiUtil;
 
 import javax.persistence.*;
 import java.util.HashSet;

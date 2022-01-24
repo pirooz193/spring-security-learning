@@ -25,9 +25,9 @@ public class ExamResource {
     }
 
     @PostMapping("/master/create-exam")
-    public ResponseEntity<Exam> createExam(@RequestBody ExamDTO examDTO) {
-        logger.info("Request to create an Exam :{}", examDTO);
-        Exam exam = examService.save(examDTO);
+    public ResponseEntity<Exam> createExam(@RequestBody ExamDTO examDTO , @RequestParam String courseCode) {
+        logger.info("Request to create an Exam :{} to  course with course-code :{}", examDTO , courseCode);
+        Exam exam = examService.save(examDTO, courseCode);
         return ResponseEntity.created(URI.create("/create")).body(exam);
     }
 
@@ -46,17 +46,16 @@ public class ExamResource {
     }
 
     @DeleteMapping("/master/delete-question")
-    public ResponseEntity<Void> deleteQuestion(@RequestParam String questionCode, @RequestParam String examCode) {
+    public ResponseEntity<?> deleteQuestion(@RequestParam String questionCode, @RequestParam String examCode) {
         logger.info("Request to delete Exam's question with question-code :{}", questionCode);
         examService.deleteQuestion(questionCode, examCode);
-        return (ResponseEntity<Void>) ResponseEntity.ok();
+        return  ResponseEntity.ok().build();
     }
 
     @GetMapping("/master/exam-info")
     public ResponseEntity<Exam> takeTest(@RequestParam String examCode) {
         logger.info("Request to check exam with exam-code :{}", examCode);
         Exam exam = examService.getExamByExamCode(examCode);
-//            examService.checkExamTime(exam);
         return ResponseEntity.ok(exam);
     }
 

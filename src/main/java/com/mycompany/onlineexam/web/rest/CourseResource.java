@@ -1,25 +1,17 @@
 package com.mycompany.onlineexam.web.rest;
 
 import com.mycompany.onlineexam.domain.Course;
-import com.mycompany.onlineexam.domain.constants.Constants;
 import com.mycompany.onlineexam.service.CourseService;
 import com.mycompany.onlineexam.service.dto.CourseDTO;
 import com.mycompany.onlineexam.web.errors.FullCapacityException;
 import com.mycompany.onlineexam.web.errors.StudentExistenceException;
-import com.mycompany.onlineexam.web.mdel.ApiUtil;
-import com.mycompany.onlineexam.web.mdel.ServiceResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.zalando.problem.Status;
 
-import javax.swing.plaf.IconUIResource;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")

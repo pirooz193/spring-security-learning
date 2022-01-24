@@ -7,7 +7,7 @@ import com.mycompany.onlineexam.service.MasterService;
 import com.mycompany.onlineexam.service.UserService;
 import com.mycompany.onlineexam.service.dto.MasterDTO;
 import com.mycompany.onlineexam.service.mapper.MasterMapper;
-import com.mycompany.onlineexam.web.mdel.ApiUtil;
+import com.mycompany.onlineexam.web.model.ApiUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
