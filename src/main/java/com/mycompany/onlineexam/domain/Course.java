@@ -24,7 +24,7 @@ public class Course {
 //    @JoinColumn(name = "master_id")
     private Master master;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "course_students",
             joinColumns = {@JoinColumn(name = "course_id")},

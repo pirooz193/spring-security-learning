@@ -1,7 +1,12 @@
 package com.mycompany.onlineexam.service.impl;
 
 import com.mycompany.onlineexam.domain.*;
-import com.mycompany.onlineexam.repository.*;
+import com.mycompany.onlineexam.repository.CourseRepository;
+import com.mycompany.onlineexam.repository.MasterRepository;
+import com.mycompany.onlineexam.repository.RoleRepository;
+import com.mycompany.onlineexam.repository.StudentRepository;
+import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,13 +29,16 @@ class CourseServiceImplTest {
     @Autowired
     MasterRepository masterRepository;
     @Autowired
-    ExamRepository examRepository;
-    @Autowired
     RoleRepository roleRepository;
 
     @Test
-    void createCourse() {
+    @Before
+    public void test() {
         setUp();
+    }
+
+    @Test
+    void createCourse() {
         Course course = new Course();
         course.setCourseTitle("test course");
         course.setCourseCode("test-course-code");
@@ -131,17 +139,27 @@ class CourseServiceImplTest {
 
     @Test
     void addStudentToCourse() {
+        Student student = studentRepository.findStudentByUsername("student");
+        Course course = courseRepository.findCourseByCourseCode("test-course-code");
+        course.getStudents().add(student);
+        courseRepository.save(course);
     }
 
     @Test
     void addMasterToCourse() {
+        Master master = masterRepository.findMasterByUsername("master");
+        Course course = courseRepository.findCourseByCourseCode("test-course-code");
+        course.setMaster(master);
+        courseRepository.save(course);
     }
 
     @Test
     void getCourseByCourseCode() {
+        Assertions.assertNotNull(courseRepository.findCourseByCourseCode("test-course-code"));
     }
 
     @Test
     void getAllCourses() {
+        Assertions.assertNotNull(courseRepository.findAll());
     }
 }
