@@ -2,12 +2,14 @@ package com.mycompany.onlineexam.service.impl;
 
 import com.mycompany.onlineexam.domain.Role;
 import com.mycompany.onlineexam.domain.User;
+import com.mycompany.onlineexam.domain.constants.Constants;
 import com.mycompany.onlineexam.repository.RoleRepository;
 import com.mycompany.onlineexam.repository.UserRepository;
 import com.mycompany.onlineexam.service.UserService;
 import com.mycompany.onlineexam.web.errors.UserNotFountException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mycompany.onlineexam.domain.constants.Constants.PASSWORD;
+import static com.mycompany.onlineexam.domain.constants.Constants.USERNAME;
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -40,6 +45,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
+    @Value("${application.security.login-address}")
+    private String loginAddress ;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -85,10 +93,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public String getToken(String username, String password) {
         MultiValueMap<String, String> user = new LinkedMultiValueMap<>();
-        user.add("username", username);
-        user.add("password", password);
+        user.add(USERNAME, username);
+        user.add(PASSWORD, password);
         String token = WebClient.create().post()
-                .uri("localhost:8080/api/login")
+                .uri(loginAddress)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromFormData(user))
