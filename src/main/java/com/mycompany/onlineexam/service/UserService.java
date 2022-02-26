@@ -2,6 +2,7 @@ package com.mycompany.onlineexam.service;
 
 import com.mycompany.onlineexam.domain.Role;
 import com.mycompany.onlineexam.domain.User;
+import com.mycompany.onlineexam.web.model.TokenModel;
 
 import java.util.List;
 
@@ -18,5 +19,5 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    String getToken(String username, String password);
+    TokenModel getToken(String username, String password);
 }
