@@ -2,11 +2,11 @@ package com.mycompany.onlineexam.service.impl;
 
 import com.mycompany.onlineexam.domain.Role;
 import com.mycompany.onlineexam.domain.User;
-import com.mycompany.onlineexam.domain.constants.Constants;
 import com.mycompany.onlineexam.repository.RoleRepository;
 import com.mycompany.onlineexam.repository.UserRepository;
 import com.mycompany.onlineexam.service.UserService;
 import com.mycompany.onlineexam.web.errors.UserNotFountException;
+import com.mycompany.onlineexam.web.model.TokenModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,9 +24,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.mycompany.onlineexam.domain.constants.Constants.PASSWORD;
 import static com.mycompany.onlineexam.domain.constants.Constants.USERNAME;
@@ -47,7 +45,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Value("${application.security.login-address}")
-    private String loginAddress ;
+    private String loginAddress;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -91,17 +89,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String getToken(String username, String password) {
+    public TokenModel getToken(String username, String password) {
         MultiValueMap<String, String> user = new LinkedMultiValueMap<>();
         user.add(USERNAME, username);
         user.add(PASSWORD, password);
-        String token = WebClient.create().post()
+        TokenModel token = WebClient.create().post()
                 .uri(loginAddress)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromFormData(user))
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(TokenModel.class)
                 .block();
         return token;
     }
