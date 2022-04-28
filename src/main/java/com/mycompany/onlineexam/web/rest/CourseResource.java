@@ -46,6 +46,13 @@ public class CourseResource {
         return ResponseEntity.ok(course);
     }
 
+    @GetMapping("/master/get-master-courses")
+    public ResponseEntity<List<Course>> getMasterCourses(@RequestParam String masterCode) {
+        logger.info("Request to  get courses by master with master-code :{}", masterCode);
+        List<Course> masterCourses = courseService.getRequiredMasterCourses(masterCode);
+        return ResponseEntity.ok(masterCourses);
+    }
+
     @PutMapping("/master/add-student")
     public ResponseEntity<Integer> addStudentToCourse(@RequestParam String courseCode, @RequestParam String studentCode) throws FullCapacityException, StudentExistenceException {
         logger.info("Request to add ann student with studentCode:{} to  course with courseCode:{}", studentCode, courseCode);
@@ -59,5 +66,4 @@ public class CourseResource {
             Course course = courseService.addMasterToCourse(masterCode, courseCode);
         return ResponseEntity.ok(course);
     }
-
 }

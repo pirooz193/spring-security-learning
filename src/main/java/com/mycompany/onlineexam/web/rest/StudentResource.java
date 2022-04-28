@@ -84,23 +84,4 @@ public class StudentResource {
         float studentScore = studentService.checkQuestionAnswers(studentAnswers, exam, studentCode);
         return ResponseEntity.ok(studentScore);
     }
-
-    @GetMapping("/student/take-exam")
-    public ResponseEntity<ServiceResult> takeTest(@RequestParam String examCode, @RequestParam String studentCode) {
-        logger.info("Request to take exam for exam with exam-code :{} and student-code :{}", examCode, studentCode);
-        ServiceResult serviceResult;
-        Integer statusCode;
-        try {
-            studentService.deleteStudentByStudentCode(studentCode);
-            serviceResult = ApiUtil.getServiceResult(null, Constants.SUCCESSFULLY_DONE, Status.OK.getStatusCode());
-        } catch (Exception e) {
-            logger.error("Action failed, caused by :{}", e.getMessage(), e);
-            if (e instanceof HttpClientErrorException)
-                statusCode = ((HttpClientErrorException) e).getStatusCode().value();
-            else statusCode = Status.INTERNAL_SERVER_ERROR.getStatusCode();
-            serviceResult = ApiUtil.getServiceResult(null, e.getMessage(), statusCode);
-        }
-        return ResponseEntity.status(serviceResult.getStatusCode()).body(serviceResult);
-    }
-
 }

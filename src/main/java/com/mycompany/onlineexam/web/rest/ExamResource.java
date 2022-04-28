@@ -3,6 +3,7 @@ package com.mycompany.onlineexam.web.rest;
 import com.mycompany.onlineexam.domain.Exam;
 import com.mycompany.onlineexam.service.ExamService;
 import com.mycompany.onlineexam.service.dto.ExamDTO;
+import com.mycompany.onlineexam.web.model.ExamQuestionsForm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,7 @@ public class ExamResource {
     }
 
     @GetMapping("/master/exam-info")
-    public ResponseEntity<Exam> takeTest(@RequestParam String examCode) {
+    public ResponseEntity<Exam> getExamInfoByExamCode(@RequestParam String examCode) {
         logger.info("Request to check exam with exam-code :{}", examCode);
         Exam exam = examService.getExamByExamCode(examCode);
         return ResponseEntity.ok(exam);
@@ -67,11 +68,12 @@ public class ExamResource {
     }
 
     @GetMapping("/student/get-exam-by-student")
-    public ResponseEntity<Exam> getExamQuestions(@RequestParam String examCode) {
+    public ResponseEntity<List<ExamQuestionsForm>> getExamQuestions(@RequestParam String examCode) {
         logger.info("Request to show exam questions by  exam-code :{}", examCode);
         Exam exam = examService.getExamByExamCode(examCode);
         examService.checkExamTime(exam);
-        return ResponseEntity.ok(exam);
+        List<ExamQuestionsForm> examQuestion = examService.getExamQuestionsForStudent(exam);
+        return ResponseEntity.ok(examQuestion);
     }
 
     @PutMapping("/master/update-time")

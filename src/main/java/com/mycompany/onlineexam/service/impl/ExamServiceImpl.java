@@ -14,12 +14,15 @@ import com.mycompany.onlineexam.web.errors.ExamNotFoundException;
 import com.mycompany.onlineexam.web.errors.IsNotStartTimeException;
 import com.mycompany.onlineexam.web.errors.TimeIsUpException;
 import com.mycompany.onlineexam.web.model.ApiUtil;
+import com.mycompany.onlineexam.web.model.ExamQuestionsForm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -46,6 +49,7 @@ public class ExamServiceImpl implements ExamService {
         exam.setExamCode(ApiUtil.generateRandomCode(Constants.EXAM_CODE, 7));
         Course course = courseRepository.findCourseByCourseCode(courseCode);
         course.getExamList().add(exam);
+        examRepository.save(exam);
         courseRepository.save(course);
         return exam;
     }
@@ -121,6 +125,24 @@ public class ExamServiceImpl implements ExamService {
         exam.setEndDateTime(endTime);
         Exam savedExam = examRepository.save(exam);
         return examMapper.toDTO(savedExam);
+    }
+
+    /**
+     * Get exam questions  and shuffle answers to show them to students.
+     *
+     * @param exam
+     * @return List of ExamQuestionsForm
+     */
+    @Override
+    public List<ExamQuestionsForm> getExamQuestionsForStudent(Exam exam) {
+        List<ExamQuestionsForm> examQuestions = new ArrayList<>();
+        for (Question question : exam.getQuestions()) {
+            question.getAnswers().add(question.getCorrectAnswer());
+            Collections.shuffle(new ArrayList<>(question.getAnswers()));
+            examQuestions.add(new ExamQuestionsForm(question.getQuestionCode()
+                    , question.getQuestionTitle(), question.getAnswers()));
+        }
+        return examQuestions;
     }
 
 }
