@@ -16,7 +16,7 @@ public class Course {
     private String courseCode;
     @Column(name = "course_capacity", nullable = false)
     private Integer courseCapacity;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(/*cascade = CascadeType.PERSIST*/)
 //    @JoinColumn(name = "exam_id")
     private List<Exam> examList = new ArrayList<>();
 

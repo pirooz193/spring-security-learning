@@ -4,6 +4,7 @@ import com.mycompany.onlineexam.domain.Exam;
 import com.mycompany.onlineexam.service.dto.ExamDTO;
 import com.mycompany.onlineexam.web.errors.IsNotStartTimeException;
 import com.mycompany.onlineexam.web.errors.TimeIsUpException;
+import com.mycompany.onlineexam.web.model.ExamQuestionsForm;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,4 +27,6 @@ public interface ExamService {
     Long checkExamRemainingTime(String examCode) throws TimeIsUpException;
 
     ExamDTO updateExamStartAndEndTime(String examCode, LocalDateTime startTime, LocalDateTime endTime);
+
+    List<ExamQuestionsForm> getExamQuestionsForStudent(Exam exam);
 }

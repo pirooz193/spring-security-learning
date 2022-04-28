@@ -10,14 +10,18 @@ import com.mycompany.onlineexam.service.MasterService;
 import com.mycompany.onlineexam.service.StudentService;
 import com.mycompany.onlineexam.service.dto.CourseDTO;
 import com.mycompany.onlineexam.service.mapper.CourseMapper;
+import com.mycompany.onlineexam.web.errors.CourseListIsEmptyException;
 import com.mycompany.onlineexam.web.errors.FullCapacityException;
+import com.mycompany.onlineexam.web.errors.NotFoundErrorException;
 import com.mycompany.onlineexam.web.errors.StudentExistenceException;
 import com.mycompany.onlineexam.web.model.ApiUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -110,6 +114,17 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getAllCourses() {
         logger.info("Request to get all courses");
         return courseRepository.findAll();
+    }
+
+    @Override
+    public List<Course> getRequiredMasterCourses(String masterCode) {
+        logger.debug("Request to get master :{} courses", masterCode);
+        Master master = masterService.getMasterByMasterCode(masterCode);
+        List<Course> allCourses = courseRepository.findAll();
+        List<Course> masterCourses = allCourses.stream().filter(course -> course.getMaster() != null && course.getMaster().getMasterCode().equals(master.getMasterCode())
+        ).collect(Collectors.toList());
+     if (masterCourses.isEmpty()) throw new CourseListIsEmptyException();
+        return  masterCourses ;
     }
 
 }

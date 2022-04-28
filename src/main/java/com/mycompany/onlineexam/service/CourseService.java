@@ -17,4 +17,6 @@ public interface CourseService {
     Course getCourseByCourseCode(String courseCode);
 
     List<Course> getAllCourses();
+
+    List<Course> getRequiredMasterCourses(String masterCode);
 }
