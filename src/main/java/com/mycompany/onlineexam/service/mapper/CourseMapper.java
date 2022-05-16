@@ -8,6 +8,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CourseMapper {
 
-    @Mapping(source = "capacity" , target = "courseCapacity")
+    @Mapping(source = "capacity", target = "courseCapacity")
     Course toEntity(CourseDTO courseDTO);
+
+    @Mapping(source = "courseCapacity", target = "capacity")
+    CourseDTO toDTO(Course course);
 }

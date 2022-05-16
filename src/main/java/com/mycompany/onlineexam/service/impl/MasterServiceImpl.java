@@ -13,10 +13,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.mycompany.onlineexam.config.enumuration.ApplicationUserRoles.ROLE_MASTER;
 
 @Service
+@Transactional
 public class MasterServiceImpl implements MasterService {
 
     @Value(value = "${application.constants.master-code-number}")
