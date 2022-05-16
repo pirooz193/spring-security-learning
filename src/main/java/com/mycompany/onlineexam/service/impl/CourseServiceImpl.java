@@ -12,18 +12,18 @@ import com.mycompany.onlineexam.service.dto.CourseDTO;
 import com.mycompany.onlineexam.service.mapper.CourseMapper;
 import com.mycompany.onlineexam.web.errors.CourseListIsEmptyException;
 import com.mycompany.onlineexam.web.errors.FullCapacityException;
-import com.mycompany.onlineexam.web.errors.NotFoundErrorException;
 import com.mycompany.onlineexam.web.errors.StudentExistenceException;
 import com.mycompany.onlineexam.web.model.ApiUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CourseServiceImpl implements CourseService {
 
     private final Logger logger = LogManager.getLogger(CourseServiceImpl.class);
@@ -123,8 +123,18 @@ public class CourseServiceImpl implements CourseService {
         List<Course> allCourses = courseRepository.findAll();
         List<Course> masterCourses = allCourses.stream().filter(course -> course.getMaster() != null && course.getMaster().getMasterCode().equals(master.getMasterCode())
         ).collect(Collectors.toList());
-     if (masterCourses.isEmpty()) throw new CourseListIsEmptyException();
-        return  masterCourses ;
+        if (masterCourses.isEmpty()) throw new CourseListIsEmptyException();
+        return masterCourses;
+    }
+
+    @Override
+    public CourseDTO updateCourseInfo(CourseDTO courseDTO) {
+        logger.info("Request to update course :{} in service layer", courseDTO);
+        Course course = courseRepository.findCourseByCourseCode(courseDTO.getCourseCode());
+        if (courseDTO.getCourseTitle() != null) course.setCourseTitle(courseDTO.getCourseTitle());
+        if (courseDTO.getCapacity() != null) course.setCourseCapacity(courseDTO.getCapacity());
+        courseRepository.save(course);
+        return courseMapper.toDTO(course);
     }
 
 }

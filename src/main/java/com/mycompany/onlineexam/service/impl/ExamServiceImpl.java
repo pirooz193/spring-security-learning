@@ -18,6 +18,7 @@ import com.mycompany.onlineexam.web.model.ExamQuestionsForm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@Transactional
 public class ExamServiceImpl implements ExamService {
 
     private Logger logger = LogManager.getLogger(ExamServiceImpl.class);

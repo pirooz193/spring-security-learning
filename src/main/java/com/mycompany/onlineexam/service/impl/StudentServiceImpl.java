@@ -18,12 +18,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static com.mycompany.onlineexam.config.enumuration.ApplicationUserRoles.ROLE_STUDENT;
 
 @Service
+@Transactional
 public class StudentServiceImpl implements StudentService {
 
     private final Logger logger = LogManager.getLogger(StudentServiceImpl.class);
@@ -32,18 +34,16 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final ExamService examService;
-    private final AnswerMapper answerMapper;
 
     @Value(value = "${application.constants.student-code-number}")
     private Integer NUMBER_OF_STUDENT_CODE;
 
-    public StudentServiceImpl(UserService userService, PasswordEncoder passwordEncoder, StudentRepository studentRepository, StudentMapper studentMapper, ExamService examService, AnswerMapper answerMapper) {
+    public StudentServiceImpl(UserService userService, PasswordEncoder passwordEncoder, StudentRepository studentRepository, StudentMapper studentMapper, ExamService examService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
         this.examService = examService;
-        this.answerMapper = answerMapper;
     }
 
     @Override
