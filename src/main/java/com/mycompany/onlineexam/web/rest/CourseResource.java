@@ -25,7 +25,7 @@ public class CourseResource {
         this.courseService = courseService;
     }
 
-    @PostMapping("/master/create-course")
+    @PostMapping("/admin/create-course")
     public ResponseEntity<Course> createCourse(@RequestBody CourseDTO courseDTO) {
         logger.info("Request to create a new Course:{} ", courseDTO);
         Course course = courseService.createCourse(courseDTO);
@@ -44,6 +44,13 @@ public class CourseResource {
         logger.info("Request to get Course vy course-code :{}", courseCode);
             Course course = courseService.getCourseByCourseCode(courseCode);
         return ResponseEntity.ok(course);
+    }
+
+    @PutMapping("/admin/update-course")
+    public ResponseEntity<CourseDTO> updateCourse(@RequestBody CourseDTO courseDTO) {
+        logger.info("Request to update course :{}", courseDTO);
+        CourseDTO updatedCourseDTO = courseService.updateCourseInfo(courseDTO);
+        return ResponseEntity.ok(updatedCourseDTO) ;
     }
 
     @GetMapping("/master/get-master-courses")

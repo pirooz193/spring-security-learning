@@ -19,4 +19,6 @@ public interface CourseService {
     List<Course> getAllCourses();
 
     List<Course> getRequiredMasterCourses(String masterCode);
+
+    CourseDTO updateCourseInfo(CourseDTO courseDTO);
 }
