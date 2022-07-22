@@ -9,4 +9,8 @@ public interface AdminService {
     Admin checkAdminLogin(String username, String password);
 
     Admin getAdminByUsername(String username);
+
+    Admin createNewAdmin(Admin admin);
+
+    void deleteAdminByUsername(String adminUsername);
 }

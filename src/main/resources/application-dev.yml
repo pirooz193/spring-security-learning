@@ -15,5 +15,6 @@ application :
   constants:
     master-code-number: 7
     student-code-number: 7
+    admin-code-number: 10
 #server:
 #  port: 8083
