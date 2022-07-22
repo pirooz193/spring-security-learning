@@ -6,10 +6,9 @@ import com.mycompany.onlineexam.web.errors.UnAuthorizedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -20,6 +19,20 @@ public class AdminResource {
 
     public AdminResource(AdminService adminService) {
         this.adminService = adminService;
+    }
+
+    @PostMapping("/create-new-admin")
+    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
+        logger.info("Request to create admin :{}", admin);
+        Admin createdAdmin = adminService.createNewAdmin(admin);
+        return ResponseEntity.created(URI.create("/create-new-admin")).body(createdAdmin);
+    }
+
+    @DeleteMapping("delete")
+    public ResponseEntity<?> deleteAdmin(@RequestParam String adminUsername) {
+        logger.info("Request to delete admin by username :{}", adminUsername);
+        adminService.deleteAdminByUsername(adminUsername);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
